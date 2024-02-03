@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  # Frontend (React)
+  frontend:
+    image: node:14
+    working_dir: /app/frontend
+    volumes:
+      - ./frontend:/app/frontend
+    ports:
+      - "3000:3000"
+    command: npm start
+
+  # Backend (Node.js with Express)
+  backend:
+    image: node:14
+    working_dir: /app/backend
+    volumes:
+      - ./backend:/app/backend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+    command: sh -c "npm install && npm start"
+
+  # PostgreSQL
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: hubbeappdb
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: admin
+
+  # TypeScript Compiler (for backend and frontend)
+  tsc:
+    image: node:14
+    working_dir: /app
+    volumes:
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+    command: npx tsc --watch
+
+  # Jest for backend tests
+  jest-backend:
+    image: node:14
+    working_dir: /app/backend
+    volumes:
+      - ./backend:/app/backend
+    command: npm test
+
+volumes:
+  hubbe-app:
+  frontend-volume:
+  backend-volume:
