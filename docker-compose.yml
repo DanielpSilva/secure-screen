@@ -9,7 +9,7 @@ services:
       - ./frontend:/app/frontend
     ports:
       - "3000:3000"
-    command: npm start
+    command: yarn start
 
   # Backend (Node.js with Express)
   backend:
@@ -21,7 +21,7 @@ services:
       - "3001:3001"
     depends_on:
       - postgres
-    command: sh -c "npm install && npm start"
+    command: sh -c "yarn && yarn start"
 
   # PostgreSQL
   postgres:

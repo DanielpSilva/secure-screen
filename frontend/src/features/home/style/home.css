@@ -1,0 +1,33 @@
+.home {
+  height: 100vh;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.home button {
+    background-color: #023047;
+    border: none;
+    border-radius: 3px;
+}
+
+.home button:hover {
+    background-color: #125b80;
+}
+
+.home button:active {
+    background-color: #125b80;
+}
+
+.home-card {
+    background-color: #023047;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-card img {
+width: 200px;
+}
