@@ -1,13 +1,26 @@
 import { CreateSessionUseCase } from "./create-session";
+import * as SessionRepository from "../../../infrastructure/repository/SessionRepository";
+
+jest.mock("../../../domain/entity/Session", () => ({
+  Session: {
+    createNew: jest.fn().mockReturnValue({ id: "session_id", data: "session_data" }),
+  },
+}));
 
 describe("CreateSessionUseCase", () => {
-  it("must create a session with the provided creation data", async () => {
-    const created_at = new Date();
-    const sut = new CreateSessionUseCase();
+  let saveMock: jest.Mock;
 
-    const session = await sut.execute({ created_at });
+  beforeEach(() => {
+    saveMock = jest.fn();
+    SessionRepository.SessionRepository.save = saveMock;
+  });
 
-    expect(session).toBeDefined();
-    expect(session.props.created_at).toEqual(created_at);
+  it("deve criar uma nova sessão e salvá-la", async () => {
+    const createSessionUseCase = new CreateSessionUseCase();
+
+    await createSessionUseCase.execute();
+
+    expect(saveMock).toHaveBeenCalledTimes(1);
+    expect(saveMock).toHaveBeenCalledWith({ id: "session_id", data: "session_data" });
   });
 });

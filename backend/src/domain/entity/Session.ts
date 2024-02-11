@@ -15,7 +15,12 @@ export class Session extends DefaultEntity<SessionProps> {
     this.created_at = props?.created_at;
   }
 
-  static createNew(props: SessionProps, id?: string) {
+  static createNew(props: Partial<SessionProps> = {}, id?: string) {
     return new Session({ ...props, created_at: props.created_at ?? new Date() }, id);
+  }
+
+  toJSON() {
+    const { id, created_at } = this;
+    return { id, created_at };
   }
 }
