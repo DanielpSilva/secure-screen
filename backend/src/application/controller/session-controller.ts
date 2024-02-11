@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateSessionUseCase } from "../useCases/create-session";
+import { CreateSessionUseCase } from "../useCases/session/create-session";
 
 export class SessionController {
   private createSessionUseCase: CreateSessionUseCase;
@@ -14,11 +14,11 @@ export class SessionController {
       const session = await this.createSessionUseCase.execute({ createdAt });
 
       res.status(201).json({
-        message: "Sessão criada com sucesso!",
+        message: "Session created with sucess!",
+        timestamp: new Date().getTime(),
         session,
       });
     } catch (error) {
-      console.error("Error creating session:", error);
       res.status(500).json({ message: "Erro interno do servidor" });
     }
   }
