@@ -1,25 +1,30 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { appDataSource } from "./infrastructure/database/app-data-source";
-import { sessionRouter } from "./routes/sessionRoutes";
-import { securePageRouter } from "./routes/securePageRoutes";
-
-appDataSource
-  .initialize()
-  .then(() => {})
-  .catch((error) => console.log(error));
+import "reflect-metadata";
+import { sessionRouter } from "./routes/SessionRoutes";
+import { securePageRouter } from "./routes/SecurePageRoutes";
+import { runMigrations } from "./infrastructure/run-migrations";
+import { appDataSource } from "./app-data-source";
 
 const app = express();
+const PORT = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
 app.use(cors());
-
 app.use("/sessions", sessionRouter);
 app.use("/secure-page", securePageRouter);
 
-const PORT = process.env.PORT || 3001;
+appDataSource
+  .initialize()
+  .then(async () => {
+    await runMigrations();
+    startServer();
+  })
+  .catch((error) => console.error("Error during Data Source initialization:", error));
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+async function startServer() {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}

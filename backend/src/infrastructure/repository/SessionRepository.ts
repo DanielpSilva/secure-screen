@@ -1,14 +1,13 @@
+import { appDataSource } from "../../app-data-source";
 import { Session } from "../../domain/entity/Session";
-import { appDataSource } from "../database/app-data-source";
 
 export const SessionRepository = appDataSource.getRepository(Session).extend({
-  findBySessionId(sessionId: string) {
-    return this.createQueryBuilder("session").where("session.id = :sessionId", { sessionId }).getOne();
+  findBySessionId(session_id: string) {
+    return this.createQueryBuilder("session").where("session.id = :session_id", { session_id }).getOne();
   },
 
   async create(sessionData: Partial<Session>) {
     const session = this.create(sessionData);
-    await this.save(session);
-    return session;
+    return await this.save(session);
   },
 });

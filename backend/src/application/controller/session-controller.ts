@@ -10,8 +10,8 @@ export class SessionController {
 
   async createSession(req: Request, res: Response): Promise<void> {
     try {
-      const { createdAt } = req.body;
-      const session = await this.createSessionUseCase.execute({ createdAt });
+      const { created_at } = req.body;
+      const session = await this.createSessionUseCase.execute({ created_at });
 
       res.status(201).json({
         message: "Session created with sucess!",

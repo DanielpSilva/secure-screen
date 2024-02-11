@@ -1,4 +1,4 @@
-import { SecurePage } from "../../../entity/secure-page";
+import { SecurePage } from "../../../domain/entity/SecurePage";
 
 export interface CheckActiveSecurePageProps {
   path: string;
@@ -7,22 +7,22 @@ export interface CheckActiveSecurePageProps {
 export class CheckActiveSecurePageUseCase {
   execute({ path }: CheckActiveSecurePageProps): boolean {
     const securePages = [
-      SecurePage.create({
-        sessionId: "abc123",
+      SecurePage.createNew({
+        session_id: "abc123",
         path: "/secure-page",
-        accessedAt: new Date(),
+        accessed_at: new Date(),
         active: true,
       }),
-      SecurePage.create({
-        sessionId: "def456",
+      SecurePage.createNew({
+        session_id: "def456",
         path: "/secure-page-2",
-        accessedAt: new Date(),
+        accessed_at: new Date(),
         active: false,
       }),
-      SecurePage.create({
-        sessionId: "ghi789",
+      SecurePage.createNew({
+        session_id: "ghi789",
         path: "/secure-page-3",
-        accessedAt: new Date(),
+        accessed_at: new Date(),
         active: true,
       }),
     ];

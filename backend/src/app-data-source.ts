@@ -7,9 +7,9 @@ export const appDataSource = new DataSource({
   username: "root",
   password: "admin",
   database: "hubbeappdb",
-  entities: ["src/domain/entity/*.ts"],
-  migrations: ["./src/infraestructure/database/migrations"],
-  migrationsTableName: "custom_migration_table",
-  logging: true,
+  entities: ["src/domain/entity/**/*.ts"],
+  migrations: ["src/infrastructure/migrations/**/*.ts"],
+  migrationsTableName: "migrations",
+  logging: false,
   synchronize: true,
 });

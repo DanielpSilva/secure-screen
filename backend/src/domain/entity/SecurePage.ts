@@ -2,32 +2,35 @@ import { Column, Entity } from "typeorm";
 import { DefaultEntity } from "../core/DefaultEntity";
 
 type SecurePageProps = {
-  sessionId: string;
+  session_id: string;
   path: string;
-  acessedAt: Date;
+  accessed_at: Date;
+  active: boolean;
 };
 
 @Entity()
 export class SecurePage extends DefaultEntity<SecurePageProps> {
   @Column()
-  sessionId: string;
+  session_id: string;
 
   @Column()
   path: string;
 
   @Column()
-  acessedAt: Date;
+  accessed_at: Date;
+
+  @Column()
+  active: boolean;
 
   private constructor(props: SecurePageProps, id?: string) {
     super(props, id);
-    this.sessionId = props.sessionId;
-    this.path = props.path;
-    this.acessedAt = props.acessedAt;
+    this.session_id = props?.session_id;
+    this.path = props?.path;
+    this.accessed_at = props?.accessed_at;
+    this.active = props?.active;
   }
 
   static createNew(props: SecurePageProps, id?: string) {
-    const page = new SecurePage(props, id);
-
-    return page;
+    return new SecurePage(props, id);
   }
 }
