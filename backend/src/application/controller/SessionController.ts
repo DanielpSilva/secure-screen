@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { CreateSessionUseCase } from "../useCases/session/NewSession";
 
 export class SessionController {
@@ -8,7 +8,7 @@ export class SessionController {
     this.createSessionUseCase = createSessionUseCase;
   }
 
-  async createSession(req: Request, res: Response): Promise<void> {
+  async createSession(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const session = await this.createSessionUseCase.execute();
 
@@ -18,7 +18,7 @@ export class SessionController {
         data: session,
       });
     } catch (error) {
-      res.status(500).json({ message: "Erro interno do servidor" });
+      next(error);
     }
   }
 }

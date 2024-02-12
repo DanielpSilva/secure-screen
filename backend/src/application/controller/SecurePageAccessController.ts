@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { CheckIfExistsActiveSecurePageUseCase } from "../useCases/securePage/CheckIfExistsActiveSecurePageAccess";
 import { ValidationRequestError } from "../../errors/ValidationRequestError";
 import { NewSecurePageAccessUseCase } from "../useCases/securePage/NewSecurePageAccess";
@@ -19,7 +19,7 @@ export class SecurePageAccessController {
     this.deactivateSecurePageAccessUseCase = deactivateSecurePageAccessUseCase;
   }
 
-  async newSecurePageAccess(req: Request, res: Response): Promise<void> {
+  async newSecurePageAccess(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { path, session_id } = req.body;
 
@@ -31,15 +31,11 @@ export class SecurePageAccessController {
 
       res.status(200).json({ securePageAccess });
     } catch (error) {
-      if (error instanceof ValidationRequestError) {
-        res.status(400).json({ message: error.message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error);
     }
   }
 
-  async checkActiveSecurePageAccess(req: Request, res: Response): Promise<void> {
+  async checkActiveSecurePageAccess(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { path } = req.body;
 
@@ -53,15 +49,11 @@ export class SecurePageAccessController {
         isActive: isActive,
       });
     } catch (error) {
-      if (error instanceof ValidationRequestError) {
-        res.status(400).json({ message: error.message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error);
     }
   }
 
-  async disableSecurePageAcess(req: Request, res: Response): Promise<void> {
+  async disableSecurePageAcess(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { session_id } = req.body;
 
@@ -75,11 +67,7 @@ export class SecurePageAccessController {
         data: session,
       });
     } catch (error) {
-      if (error instanceof ValidationRequestError) {
-        res.status(400).json({ message: error.message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error);
     }
   }
 }

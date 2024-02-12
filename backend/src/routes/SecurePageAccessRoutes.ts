@@ -14,10 +14,12 @@ const securePageController = new SecurePageAccessController(
   deactivateSecurePageAccessUseCase,
 );
 
-securePageRouter.post("/check-active-secure-page-acess", (req, res) =>
-  securePageController.checkActiveSecurePageAccess(req, res),
+securePageRouter.post("/check-active-secure-page-acess", (req, res, next) =>
+  securePageController.checkActiveSecurePageAccess(req, res, next),
 );
 
-securePageRouter.post("/new-secure-page-acess", (req, res) => securePageController.newSecurePageAccess(req, res));
+securePageRouter.post("/new-secure-page-acess", (req, res, next) =>
+  securePageController.newSecurePageAccess(req, res, next),
+);
 
 export { securePageRouter };

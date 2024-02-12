@@ -6,6 +6,6 @@ const sessionRouter = express.Router();
 const createSessionUseCase = new CreateSessionUseCase();
 const sessionController = new SessionController(createSessionUseCase);
 
-sessionRouter.post("/create-session", (req, res) => sessionController.createSession(req, res));
+sessionRouter.post("/create-session", (req, res, next) => sessionController.createSession(req, res, next));
 
 export { sessionRouter };
