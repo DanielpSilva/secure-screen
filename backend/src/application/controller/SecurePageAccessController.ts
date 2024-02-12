@@ -2,21 +2,21 @@ import { Request, Response } from "express";
 import { CheckIfExistsActiveSecurePageUseCase } from "../useCases/securePage/CheckIfExistsActiveSecurePageAccess";
 import { ValidationRequestError } from "../../errors/ValidationRequestError";
 import { NewSecurePageAccessUseCase } from "../useCases/securePage/NewSecurePageAccess";
-import { DisableSecurePageAccessUseCase } from "../useCases/securePage/DisableSecurePageAccess";
+import { DeactivateSecurePageAccessUseCase } from "../useCases/securePage/DeactivateSecurePageAccess";
 
 export class SecurePageAccessController {
   private checkActiveSecurePageUseCase: CheckIfExistsActiveSecurePageUseCase;
   private newSecurePageAccesUseCase: NewSecurePageAccessUseCase;
-  private disableSecurePageAccessUseCase: DisableSecurePageAccessUseCase;
+  private deactivateSecurePageAccessUseCase: DeactivateSecurePageAccessUseCase;
 
   constructor(
     checkActiveSecurePageUseCase: CheckIfExistsActiveSecurePageUseCase,
     newSecurePageAccessUseCase: NewSecurePageAccessUseCase,
-    disableSecurePageAccessUseCase: DisableSecurePageAccessUseCase,
+    deactivateSecurePageAccessUseCase: DeactivateSecurePageAccessUseCase,
   ) {
     this.checkActiveSecurePageUseCase = checkActiveSecurePageUseCase;
     this.newSecurePageAccesUseCase = newSecurePageAccessUseCase;
-    this.disableSecurePageAccessUseCase = disableSecurePageAccessUseCase;
+    this.deactivateSecurePageAccessUseCase = deactivateSecurePageAccessUseCase;
   }
 
   async newSecurePageAccess(req: Request, res: Response): Promise<void> {
@@ -69,7 +69,7 @@ export class SecurePageAccessController {
         throw new ValidationRequestError("Invalid Request");
       }
 
-      const session = this.disableSecurePageAccessUseCase.execute(session_id);
+      const session = this.deactivateSecurePageAccessUseCase.execute(session_id);
 
       res.status(200).json({
         data: session,

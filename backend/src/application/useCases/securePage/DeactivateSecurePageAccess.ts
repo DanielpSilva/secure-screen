@@ -1,12 +1,12 @@
 import { ResourceNotFoundError } from "../../../errors/ResourceNotFoundError";
 import { SecurePageAccessRepository } from "../../../infrastructure/repository/SecurePageAccessRepository";
 
-export interface DisableSecurePageAccessUseCaseProps {
+export interface DeactivateSecurePageAccessUseCaseProps {
   session_id: string;
 }
 
-export class DisableSecurePageAccessUseCase {
-  async execute({ session_id }: DisableSecurePageAccessUseCaseProps) {
+export class DeactivateSecurePageAccessUseCase {
+  async execute({ session_id }: DeactivateSecurePageAccessUseCaseProps) {
     const access = await SecurePageAccessRepository.findActiveBySessionId(session_id);
 
     if (!access) {
