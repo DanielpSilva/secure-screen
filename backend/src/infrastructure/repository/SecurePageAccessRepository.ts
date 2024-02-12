@@ -1,4 +1,4 @@
-import { appDataSource } from "../../app-data-source";
+import { appDataSource } from "../../data-source";
 import { SecurePageAccess } from "../../domain/entity/SecurePageAccess";
 
 export const SecurePageAccessRepository = appDataSource.getRepository(SecurePageAccess).extend({
