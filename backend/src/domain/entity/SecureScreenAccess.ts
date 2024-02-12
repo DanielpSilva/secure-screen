@@ -1,13 +1,13 @@
 import { Column, Entity } from "typeorm";
 import { DefaultEntity } from "../core/DefaultEntity";
 
-type SecurePageAccessProps = {
+type SecureScreenAccessProps = {
   session_id: string;
   path: string;
 };
 
 @Entity()
-export class SecurePageAccess extends DefaultEntity<SecurePageAccessProps> {
+export class SecureScreenAccess extends DefaultEntity<SecureScreenAccessProps> {
   @Column()
   session_id: string;
 
@@ -20,7 +20,7 @@ export class SecurePageAccess extends DefaultEntity<SecurePageAccessProps> {
   @Column()
   active: boolean = true;
 
-  constructor(props: SecurePageAccessProps, id?: string) {
+  constructor(props: SecureScreenAccessProps, id?: string) {
     super(props, id);
     this.session_id = props?.session_id;
     this.path = props?.path;
@@ -28,8 +28,8 @@ export class SecurePageAccess extends DefaultEntity<SecurePageAccessProps> {
     this.active = true;
   }
 
-  static createNew(props: SecurePageAccessProps, id?: string) {
-    return new SecurePageAccess(props, id);
+  static createNew(props: SecureScreenAccessProps, id?: string) {
+    return new SecureScreenAccess(props, id);
   }
 
   deactivate() {
