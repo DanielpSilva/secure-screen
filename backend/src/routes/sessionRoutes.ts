@@ -1,6 +1,6 @@
 import express from "express";
-import { CreateSessionUseCase } from "../application/useCases/session/create-session";
-import { SessionController } from "../application/controller/session-controller";
+import { CreateSessionUseCase } from "../application/useCases/session/NewSession";
+import { SessionController } from "../application/controller/SessionController";
 
 const sessionRouter = express.Router();
 const createSessionUseCase = new CreateSessionUseCase();
