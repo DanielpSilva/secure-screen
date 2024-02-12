@@ -14,11 +14,11 @@ const secureScreenController = new SecureScreenAccessController(
   deactivateSecureScreenAccessUseCase,
 );
 
-secureScreenRouter.post("/check-active-secure-page-acess", (req, res, next) =>
+secureScreenRouter.post("/check-active-secure-screen-acess", (req, res, next) =>
   secureScreenController.checkActiveSecureScreenAccess(req, res, next),
 );
 
-secureScreenRouter.post("/new-secure-page-acess", (req, res, next) =>
+secureScreenRouter.post("/new-secure-screen-acess", (req, res, next) =>
   secureScreenController.newSecureScreenAccess(req, res, next),
 );
 
