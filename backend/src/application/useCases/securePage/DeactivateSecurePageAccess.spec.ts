@@ -1,5 +1,8 @@
 import { SecurePageAccessRepository } from "../../../infrastructure/repository/SecurePageAccessRepository";
-import { DisableSecurePageAccessUseCase, DisableSecurePageAccessUseCaseProps } from "./DeactivateSecurePageAccess";
+import {
+  DeactivateSecurePageAccessUseCase,
+  DeactivateSecurePageAccessUseCaseProps,
+} from "./DeactivateSecurePageAccess";
 
 jest.mock("../../../infrastructure/repository/SecurePageAccessRepository", () => ({
   SecurePageAccessRepository: {
@@ -22,8 +25,8 @@ describe("DeactivateSecurePageAccess", () => {
 
   it("should deactivate secure page access", async () => {
     const session_id = "some_session_id";
-    const props: DisableSecurePageAccessUseCaseProps = { session_id };
-    const useCase = new DisableSecurePageAccessUseCase();
+    const props: DeactivateSecurePageAccessUseCaseProps = { session_id };
+    const useCase = new DeactivateSecurePageAccessUseCase();
 
     await useCase.execute(props);
 
