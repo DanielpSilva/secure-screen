@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateSessionUseCase } from "../useCases/session/create-session";
+import { CreateSessionUseCase } from "../useCases/session/NewSession";
 
 export class SessionController {
   private createSessionUseCase: CreateSessionUseCase;
@@ -10,13 +10,12 @@ export class SessionController {
 
   async createSession(req: Request, res: Response): Promise<void> {
     try {
-      const { created_at } = req.body;
-      const session = await this.createSessionUseCase.execute({ created_at });
+      const session = await this.createSessionUseCase.execute();
 
       res.status(201).json({
         message: "Session created with sucess!",
         timestamp: new Date().getTime(),
-        session,
+        data: session,
       });
     } catch (error) {
       res.status(500).json({ message: "Erro interno do servidor" });

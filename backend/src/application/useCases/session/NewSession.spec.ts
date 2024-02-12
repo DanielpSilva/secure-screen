@@ -1,4 +1,4 @@
-import { CreateSessionUseCase } from "./create-session";
+import { CreateSessionUseCase } from "./NewSession";
 import * as SessionRepository from "../../../infrastructure/repository/SessionRepository";
 
 jest.mock("../../../domain/entity/Session", () => ({
@@ -15,7 +15,7 @@ describe("CreateSessionUseCase", () => {
     SessionRepository.SessionRepository.save = saveMock;
   });
 
-  it("deve criar uma nova sessão e salvá-la", async () => {
+  it("should create a new session and save it", async () => {
     const createSessionUseCase = new CreateSessionUseCase();
 
     await createSessionUseCase.execute();

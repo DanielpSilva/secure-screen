@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateSessionUseCase } from "../useCases/session/create-session";
+import { CreateSessionUseCase } from "../useCases/session/NewSession";
 
 export class SessionController {
   private createSessionUseCase: CreateSessionUseCase;
