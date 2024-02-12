@@ -1,4 +1,4 @@
-import { appDataSource } from "../app-data-source";
+import { appDataSource } from "../data-source";
 
 export async function runMigrations() {
   try {
