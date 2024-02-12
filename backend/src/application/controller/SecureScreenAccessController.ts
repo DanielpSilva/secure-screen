@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { CheckIfExistsActiveSecureScreenUseCase } from "../useCases/SecureScreen/CheckIfExistsActiveSecureScreenAccess";
+import { NewSecureScreenAccessUseCase } from "../useCases/secureScreen/NewSecureScreenAccess";
+import { DeactivateSecureScreenAccessUseCase } from "../useCases/secureScreen/DeactivateSecureScreenAccess";
 import { ValidationRequestError } from "../../errors/ValidationRequestError";
-import { NewSecureScreenAccessUseCase } from "../useCases/SecureScreen/NewSecureScreenAccess";
-import { DeactivateSecureScreenAccessUseCase } from "../useCases/SecureScreen/DeactivateSecureScreenAccess";
+import { CheckIfExistsActiveSecureScreenUseCase } from "../useCases/secureScreen/CheckIfExistsActiveSecureScreenAccess";
 
 export class SecureScreenAccessController {
   private checkActiveSecureScreenUseCase: CheckIfExistsActiveSecureScreenUseCase;

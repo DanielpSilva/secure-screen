@@ -5,7 +5,7 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 import { sessionRouter } from "./routes/SessionRoutes";
-import { SecureScreenRouter } from "./routes/SecureScreenAccessRoutes";
+import { secureScreenRouter } from "./routes/SecureScreenAccessRoutes";
 import { errorHandler } from "./utils/ErrorHandle";
 
 const app = express();
@@ -17,7 +17,7 @@ const io = new Server(server);
 
 //Routes
 app.use("/session", sessionRouter);
-app.use("/secure-page-access", SecureScreenRouter);
+app.use("/secure-screen-access", secureScreenRouter);
 
 app.use(errorHandler);
 
