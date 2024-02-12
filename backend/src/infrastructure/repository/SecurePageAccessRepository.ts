@@ -1,8 +1,8 @@
 import { appDataSource } from "../../app-data-source";
 import { SecurePageAccess } from "../../domain/entity/SecurePageAccess";
 
-export const SecurePageRepository = appDataSource.getRepository(SecurePageAccess).extend({
-  async findBySessionId(session_id: string): Promise<SecurePageAccess | null> {
+export const SecurePageAccessRepository = appDataSource.getRepository(SecurePageAccess).extend({
+  async findActiveBySessionId(session_id: string): Promise<SecurePageAccess | null> {
     return this.findOne({ where: { session_id, active: true } });
   },
 
