@@ -45,6 +45,7 @@ export class WebSocketAdapter {
           await deactivateAccessUseCase.execute({ session_id } as DeactivateSecureScreenAccessUseCaseProps);
         } catch (error) {
           console.error("Erro ao desativar o acesso:", error);
+          socket.emit("accessDenied", "No Secure Screen Access Active");
         }
       });
     });
