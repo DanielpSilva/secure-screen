@@ -6,11 +6,13 @@ import { Session } from './types/Session';
 import checkActiveSecureScreenAccess from './api/CheckActiveSecureScreenAccess';
 import { useNavigate } from 'react-router-dom';
 import { CheckActiveSecureScreenAccessType } from './types/CheckActiveSecureScreen';
-
+import { useAlert } from '../../providers/AlertContext';
+import { AlertType } from '../../types/AlertType';
 const Home: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [session, setSession] = useState<Session | null>(null);
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -18,12 +20,12 @@ const Home: React.FC = () => {
         const res = await createNewSession();
         setSession(res?.data);
       } catch (error) {
-        console.error('Falha ao buscar sessão:', error);
+        showAlert('Erro ao criar sessão!', AlertType.Error);
       }
     };
 
     fetchSession();
-  }, []);
+  }, [showAlert]);
 
   const onCheckIfExistsActiveSecureScreenAcess = () => {
     setLoading(true);
@@ -36,9 +38,15 @@ const Home: React.FC = () => {
         if (!isActive) {
           navigate(payload.path, { state: { session: session?.id } });
         } else {
+          showAlert('Já existe um usuário ativo!', AlertType.Warning);
         }
       })
-      .catch(() => {})
+      .catch(() =>
+        showAlert(
+          'Erro ao verificar se a tela segura está disponível!',
+          AlertType.Error
+        )
+      )
       .finally(() => setLoading(false));
   };
 

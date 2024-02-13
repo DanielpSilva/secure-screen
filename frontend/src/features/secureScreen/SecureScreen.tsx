@@ -4,17 +4,23 @@ import './style/SecureScreen.css';
 import { TimeUtils } from '../../utils/TimeUtils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useSocket from './api/WebsocketApi';
+import { useAlert } from '../../providers/AlertContext';
+import { AlertType } from '../../types/AlertType';
 const SecureScreen: React.FC = () => {
   const [seconds, setSeconds] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
   const session = location.state?.session;
+  const { showAlert } = useAlert();
 
-  const handleAccessGranted = useCallback(() => {}, []);
+  const handleAccessGranted = useCallback(() => {
+    showAlert('Acesso concedido!', AlertType.Success);
+  }, [showAlert]);
 
   const handleAccessDenied = useCallback(() => {
+    showAlert('Acesso negado!', AlertType.Error);
     navigate('/');
-  }, [navigate]);
+  }, [navigate, showAlert]);
 
   useSocket(handleAccessGranted, handleAccessDenied, {
     session: session,
