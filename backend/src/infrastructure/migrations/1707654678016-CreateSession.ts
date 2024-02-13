@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 export class CreateSession1707654678016 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-            CREATE TABLE session (
+            CREATE TABLE IF NOT EXISTS session (
                 id UUID PRIMARY KEY,
                 created_at DATE NOT NULL
             );

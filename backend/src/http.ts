@@ -13,7 +13,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 
 //Routes
 app.use("/session", sessionRouter);

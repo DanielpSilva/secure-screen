@@ -43,11 +43,9 @@ export class SecureScreenAccessController {
         throw new ValidationRequestError("Invalid Request");
       }
 
-      const isActive = this.checkActiveSecureScreenUseCase.execute({ path });
+      const isActive = await this.checkActiveSecureScreenUseCase.execute({ path });
 
-      res.status(200).json({
-        isActive: isActive,
-      });
+      res.status(200).json(isActive);
     } catch (error) {
       next(error);
     }

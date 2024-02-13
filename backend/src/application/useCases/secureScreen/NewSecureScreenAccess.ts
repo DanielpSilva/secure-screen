@@ -9,7 +9,7 @@ export interface NewSecureScreenAccessUseCaseProps {
 export class NewSecureScreenAccessUseCase {
   execute({ session_id, path }: NewSecureScreenAccessUseCaseProps) {
     const secureScreenAccess = SecureScreenAccess.createNew({ session_id, path });
-    SecureScreenAccessRepository.save(SecureScreenAccess);
+    SecureScreenAccessRepository.save(secureScreenAccess);
 
     return secureScreenAccess;
   }
