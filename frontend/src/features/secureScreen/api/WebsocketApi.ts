@@ -1,8 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { WebSocketParamsType } from '../types/WebSocketParamsType';
+import constants from '../../../config/constants';
 
 const useSocket = (
   onAccessGranted,
@@ -16,7 +16,7 @@ const useSocket = (
   }
 
   useEffect(() => {
-    const socket = io('http://localhost:3001', { query: params });
+    const socket = io(constants.baseURL, { query: params });
 
     socket.on('accessGranted', (message) => {
       onAccessGranted(message);
@@ -28,14 +28,14 @@ const useSocket = (
     });
 
     socket.on('validationError', (message) => {
-      alert(message);
       navigate('/home');
+      onAccessDenied(message);
     });
 
     return () => {
       socket.disconnect();
     };
-  }, [onAccessGranted, onAccessDenied]);
+  }, [onAccessGranted, onAccessDenied, params, navigate]);
 };
 
 export default useSocket;
