@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import { sessionRouter } from "./routes/SessionRoutes";
 import { secureScreenRouter } from "./routes/SecureScreenAccessRoutes";
 import { errorHandler } from "./utils/ErrorHandle";
+import { AppConstants } from "./config/AppConstants";
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: AppConstants.clientUrl,
     methods: ["GET", "POST"],
     credentials: true,
   },

@@ -1,12 +1,13 @@
 import { DataSource } from "typeorm";
+import { AppConstants } from "./config/AppConstants";
 
 export const appDataSource = new DataSource({
   type: "postgres",
-  host: "localhost",
+  host: AppConstants.db.host,
   port: 5432,
-  username: "root",
-  password: "admin",
-  database: "hubbeappdb",
+  username: AppConstants.db.user,
+  password: AppConstants.db.password,
+  database: AppConstants.db.name,
   entities: ["src/domain/entity/**/*.ts"],
   migrations: ["src/infrastructure/migrations/**/*.ts"],
   migrationsTableName: "migrations",
