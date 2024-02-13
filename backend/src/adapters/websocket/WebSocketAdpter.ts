@@ -15,73 +15,38 @@ import {
 } from "../../application/useCases/secureScreen/CheckIfExistsActiveSecureScreenAccess";
 
 export class WebSocketAdapter {
-  constructor(
-    private io: SocketIOServer,
-    private deactivateSecureScreenAccessUseCase: DeactivateSecureScreenAccessUseCase,
-    private newSecureScreenAccessUseCase: NewSecureScreenAccessUseCase,
-    private checkIfExistsActiveSecureScreenUseCase: CheckIfExistsActiveSecureScreenUseCase,
-  ) {
+  private io: SocketIOServer;
+
+  constructor(io: SocketIOServer) {
+    this.io = io;
     this.setupListeners();
   }
 
   private setupListeners(): void {
-    this.io.on("connection", this.handleConnection);
-  }
+    const deactivateAccessUseCase = new DeactivateSecureScreenAccessUseCase();
+    const newSecureScreenAccess = new NewSecureScreenAccessUseCase();
 
-  private handleConnection = async (socket: Socket): Promise<void> => {
-    try {
-      await this.processConnection(socket);
-    } catch (error) {
-      console.error("Erro ao processar conexão:", error);
-      socket.emit("error", "Erro ao processar a conexão.");
-    }
-  };
+    this.io.on("connection", (socket) => {
+      const { session: session_id, path } = socket.handshake.query;
 
-  private async processConnection(socket: Socket): Promise<void> {
-    const { session: session_id, path } = socket.handshake.query;
-
-    if (!this.validateSessionAndPath(session_id, path, socket)) return;
-
-    const isActive = await this.checkAccess({ path } as CheckIfExistsActiveSecureScreenAccessProps);
-    this.emitAccessStatus(isActive, socket);
-
-    if (!isActive) {
-      await this.registerNewAccess({ session_id, path } as NewSecureScreenAccessUseCaseProps);
-    }
-
-    socket.on("disconnect", () => {
-      try {
-        this.deactivateSecureScreenAccessUseCase.execute({
-          session_id,
-        } as DeactivateSecureScreenAccessUseCaseProps);
-      } catch (error) {
-        console.error("Erro ao desativar o acesso:", error);
+      if (!session_id || !path) {
+        socket.emit("accessDenied", "Request is invalid");
       }
+
+      newSecureScreenAccess.execute({
+        session_id,
+        path,
+      } as NewSecureScreenAccessUseCaseProps);
+
+      socket.emit("accessGranted");
+
+      socket.on("disconnect", async () => {
+        try {
+          await deactivateAccessUseCase.execute({ session_id } as DeactivateSecureScreenAccessUseCaseProps);
+        } catch (error) {
+          console.error("Erro ao desativar o acesso:", error);
+        }
+      });
     });
-  }
-
-  private validateSessionAndPath(session_id: any, path: any, socket: Socket): boolean {
-    if (!session_id || !path) {
-      socket.emit("validationError", "Session ID ou Path não fornecidos");
-      socket.disconnect(true);
-      return false;
-    }
-    return true;
-  }
-
-  private async checkAccess(checkAccessParams: CheckIfExistsActiveSecureScreenAccessProps): Promise<boolean> {
-    return this.checkIfExistsActiveSecureScreenUseCase.execute(checkAccessParams);
-  }
-
-  private emitAccessStatus(isActive: boolean, socket: Socket): void {
-    if (isActive) {
-      socket.emit("accessDenied", "Acesso à tela segura negado, já existe um usuário acessando a tela segura.");
-    } else {
-      socket.emit("accessGranted", "Acesso à tela segura concedido.");
-    }
-  }
-
-  private async registerNewAccess(secureScreen: NewSecureScreenAccessUseCaseProps): Promise<void> {
-    this.newSecureScreenAccessUseCase.execute(secureScreen);
   }
 }
