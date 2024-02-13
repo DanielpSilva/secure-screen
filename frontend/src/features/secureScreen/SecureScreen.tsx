@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import './style/SecureScreen.css';
 import { TimeUtils } from '../../utils/TimeUtils';
@@ -6,26 +6,30 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import useSocket from './api/WebsocketApi';
 import { useAlert } from '../../providers/AlertContext';
 import { AlertType } from '../../types/AlertType';
+
 const SecureScreen: React.FC = () => {
   const [seconds, setSeconds] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
-  const session = location.state?.session;
   const { showAlert } = useAlert();
 
+  const params = useMemo(
+    () => ({
+      session: location.state?.session,
+      path: location.pathname,
+    }),
+    [location.state?.session, location.pathname]
+  );
+
   const handleAccessGranted = useCallback(() => {
-    showAlert('Acesso concedido!', AlertType.Success);
+    showAlert('Acesso concedido', AlertType.Success);
   }, [showAlert]);
 
   const handleAccessDenied = useCallback(() => {
-    showAlert('Acesso negado!', AlertType.Error);
     navigate('/');
-  }, [navigate, showAlert]);
+  }, [navigate]);
 
-  useSocket(handleAccessGranted, handleAccessDenied, {
-    session: session,
-    path: location.pathname,
-  });
+  useSocket(handleAccessGranted, handleAccessDenied, params);
 
   useEffect(() => {
     const interval = setInterval(() => {
