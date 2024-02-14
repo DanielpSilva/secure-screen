@@ -2,11 +2,14 @@
 
 ## Sobre o Projeto
 
-Breve descrição do projeto, incluindo a finalidade e as tecnologias utilizadas.
-
 Este projeto é uma aplicação React que funciona em navegadores web, acompanhada de um backend Node.js. 
 O objetivo é desenvolver uma aplicação com uma funcionalidade única: apenas uma pessoa por vez pode acessar uma "tela segura". 
-Esta restrição é controlada através de um sistema backend.
+- Esta restrição é controlada através de um sistema backend com websocket.
+
+### Resumo da aplicação
+A aplicação inicia na home onde tem um botão para acessar a tela segura, ao clicar nele, ele verifica se existe um acesso ativo, caso tenha, ele avisa o usuário, se não ele redireciona para a tela segura.
+
+Quando o usuário acessar tela uma conexão com o websocket será estabelecida, caso ele feche a tela ou clique no botão sair, a conexão será encerrada e o acesso a tela segura ficará disponível
 
 ## Funcionalidades
 
@@ -38,8 +41,6 @@ Para executar este projeto localmente, de forma simples, você precisará de Doc
 Este comando irá construir e iniciar os containers necessários para o frontend e o backend. Após a conclusão, a aplicação estará acessível via navegador web.
 
 ## Fotos do Projeto
-
-Aqui, você pode adicionar fotos da sua aplicação para fornecer uma visualização do projeto em funcionamento.
 
 - **Tela Principal**: ![Tela Principal](./frontend/public/images/app/home.png)
 - **Tela Segura**: ![Tela Segura](./frontend/public/images/app/secure-screen.png)
