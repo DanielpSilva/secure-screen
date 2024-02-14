@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './style/Home.css';
+import './style/home.css';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import createNewSession from './api/CreateNewSession';
 import { Session } from './types/Session';
