@@ -4,10 +4,10 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-import { sessionRouter } from "./routes/SessionRoutes";
 import { secureScreenRouter } from "./routes/SecureScreenAccessRoutes";
 import { errorHandler } from "./utils/ErrorHandle";
 import { AppConstants } from "./config/AppConstants";
+import { sessionRouter } from "./routes/sessionRoutes";
 
 const app = express();
 
