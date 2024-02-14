@@ -23,4 +23,18 @@ describe('Secure Screen Component', () => {
 
     expect(button).toBeTruthy();
   });
+
+  it('renders the exit button correctly with the right href', () => {
+    render(
+      <MemoryRouter>
+        <AlertProvider>
+          <SecureScreen />
+        </AlertProvider>
+      </MemoryRouter>
+    );
+
+    const exitButton = screen.getByRole('button', { name: 'Sair' });
+
+    expect(exitButton).toHaveAttribute('href', '/home');
+  });
 });

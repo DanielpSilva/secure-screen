@@ -27,7 +27,7 @@ const Home: React.FC = () => {
     fetchSession();
   }, [showAlert]);
 
-  const onCheckIfExistsActiveSecureScreenAcess = () => {
+  const onCheckIfExistsActiveSecureScreenAcess = async () => {
     setLoading(true);
     const payload: CheckActiveSecureScreenAccessType = {
       path: '/secure-screen',
