@@ -3,7 +3,7 @@ import SecureScreen from './features/secureScreen/SecureScreen';
 import Home from './features/home/Home';
 
 const App: React.FC = () => {
-  return (
+    return (
     <>
       <Routes>
         <Route path="/" element={<Navigate to="/home" />} />
