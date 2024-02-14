@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Server as SocketIOServer, Socket } from "socket.io";
+import { Socket, Server as SocketIOServer } from "socket.io";
 import {
   NewSecureScreenAccessUseCase,
   NewSecureScreenAccessUseCaseProps,
@@ -14,40 +12,56 @@ import {
   CheckIfExistsActiveSecureScreenUseCase,
 } from "../../application/useCases/secureScreen/CheckIfExistsActiveSecureScreenAccess";
 
+interface WebSocketHandshakeQuery {
+  session?: string;
+  path?: string;
+}
+
 export class WebSocketAdapter {
   private io: SocketIOServer;
+  private deactivateAccessUseCase: DeactivateSecureScreenAccessUseCase;
+  private newSecureScreenAccess: NewSecureScreenAccessUseCase;
+  private checkIfExistsActiveSecureScreenAccess: CheckIfExistsActiveSecureScreenUseCase;
 
   constructor(io: SocketIOServer) {
     this.io = io;
+    this.deactivateAccessUseCase = new DeactivateSecureScreenAccessUseCase();
+    this.newSecureScreenAccess = new NewSecureScreenAccessUseCase();
+    this.checkIfExistsActiveSecureScreenAccess = new CheckIfExistsActiveSecureScreenUseCase();
+
     this.setupListeners();
   }
 
-  private setupListeners(): void {
-    const deactivateAccessUseCase = new DeactivateSecureScreenAccessUseCase();
-    const newSecureScreenAccess = new NewSecureScreenAccessUseCase();
+  private async handleConnection(socket: Socket) {
+    const { session: session_id, path } = socket.handshake.query as WebSocketHandshakeQuery;
 
-    this.io.on("connection", (socket) => {
-      const { session: session_id, path } = socket.handshake.query;
+    if (!session_id || !path) {
+      socket.emit("accessDenied");
+      return;
+    }
 
-      if (!session_id || !path) {
-        socket.emit("accessDenied", "Request is invalid");
+    const isActive = await this.checkIfExistsActiveSecureScreenAccess.execute({
+      path,
+    } as CheckIfExistsActiveSecureScreenAccessProps);
+
+    if (isActive) {
+      socket.emit("accessDenied");
+      return;
+    }
+
+    this.newSecureScreenAccess.execute({ session_id, path } as NewSecureScreenAccessUseCaseProps);
+    socket.emit("accessGranted");
+
+    socket.on("disconnect", async () => {
+      try {
+        await this.deactivateAccessUseCase.execute({ session_id } as DeactivateSecureScreenAccessUseCaseProps);
+      } catch (error) {
+        socket.emit("accessDenied", "No Secure Screen Access Active");
       }
-
-      newSecureScreenAccess.execute({
-        session_id,
-        path,
-      } as NewSecureScreenAccessUseCaseProps);
-
-      socket.emit("accessGranted");
-
-      socket.on("disconnect", async () => {
-        try {
-          await deactivateAccessUseCase.execute({ session_id } as DeactivateSecureScreenAccessUseCaseProps);
-        } catch (error) {
-          console.error("Erro ao desativar o acesso:", error);
-          socket.emit("accessDenied", "No Secure Screen Access Active");
-        }
-      });
     });
+  }
+
+  private setupListeners(): void {
+    this.io.on("connection", (socket) => this.handleConnection(socket));
   }
 }
