@@ -3,25 +3,28 @@ version: '3'
 services:
   # Frontend (React)
   frontend:
-    image: node:14
-    working_dir: /app/frontend
+    image: node:latest
+    working_dir: /app
     volumes:
-      - ./frontend:/app/frontend
+      - ./frontend:/app 
     ports:
       - "3000:3000"
-    command: npm start
+    command: sh -c "yarn install && yarn start"
 
   # Backend (Node.js with Express)
   backend:
-    image: node:14
-    working_dir: /app/backend
+    image: node:latest 
+    working_dir: /app
     volumes:
-      - ./backend:/app/backend
+      - ./backend:/app 
     ports:
       - "3001:3001"
-    depends_on:
-      - postgres
-    command: sh -c "npm install && npm start"
+    environment: 
+      DB_HOST: postgres
+      DB_USER: root
+      DB_PASS: admin
+      DB_NAME: hubbeappdb
+    command: sh -c "yarn install && yarn start" 
 
   # PostgreSQL
   postgres:
@@ -32,25 +35,16 @@ services:
       POSTGRES_DB: hubbeappdb
       POSTGRES_USER: root
       POSTGRES_PASSWORD: admin
-
-  # TypeScript Compiler (for backend and frontend)
-  tsc:
-    image: node:14
-    working_dir: /app
-    volumes:
-      - ./backend:/app/backend
-      - ./frontend:/app/frontend
-    command: npx tsc --watch
+    volumes: 
+      - postgres-data:/var/lib/postgresql/data
 
   # Jest for backend tests
   jest-backend:
-    image: node:14
-    working_dir: /app/backend
+    image: node:latest
+    working_dir: /app
     volumes:
-      - ./backend:/app/backend
-    command: npm test
+      - ./backend:/app
+    command: sh -c "yarn install && yarn test" 
 
 volumes:
-  hubbe-app:
-  frontend-volume:
-  backend-volume:
+  postgres-data:

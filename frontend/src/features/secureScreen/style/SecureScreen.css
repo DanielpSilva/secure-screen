@@ -1,0 +1,13 @@
+.secure-screen {
+  background-color: #023047;
+  height: 100vh;
+  color: white;
+  position: 'relative';
+}
+
+.exit-button-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
