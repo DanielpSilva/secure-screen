@@ -27,7 +27,8 @@ const SecureScreen: React.FC = () => {
 
   const handleAccessDenied = useCallback(() => {
     navigate('/');
-  }, [navigate]);
+    showAlert('Acesso negado, já existe um acesso ativo', AlertType.Error);
+  }, [navigate, showAlert]);
 
   useSocket(handleAccessGranted, handleAccessDenied, params);
 
